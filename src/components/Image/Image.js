@@ -16,8 +16,6 @@ class Image extends React.Component {
       size: 200,
       rotation: 0,
     };
-
-    // this.rotate = this.rotate.bind(this);
   }
 
   calcImageSize() {
@@ -30,8 +28,11 @@ class Image extends React.Component {
     });
   }
 
+  delete() {
+    this.props.onDelete(this.props.dto.id);
+  }
+
   rotate() {
-    console.log(this);
     let newRotation = this.state.rotation + 90;
     if (newRotation >= 360) {
       newRotation = -360;
@@ -68,7 +69,12 @@ class Image extends React.Component {
             title="rotate"
             onClick={this.rotate.bind(this)}
           />
-          <FontAwesome className="image-icon" name="trash-alt" title="delete" />
+          <FontAwesome
+            className="image-icon"
+            name="trash-alt"
+            title="delete"
+            onClick={this.delete.bind(this)}
+          />
           <FontAwesome className="image-icon" name="expand" title="expand" />
         </div>
       </div>
