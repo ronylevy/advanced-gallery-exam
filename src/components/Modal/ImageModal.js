@@ -11,6 +11,7 @@ class ImageModal extends React.Component {
   }
 
   handleCloseModal() {
+    this.setState({ rotation: 0 });
     this.props.onClose(false);
   }
 
@@ -28,18 +29,34 @@ class ImageModal extends React.Component {
     });
   }
 
+  closeOnEscapeKeyDown(e) {
+    if (e.keyCode === 27) {
+      // console.log(this.handleCloseModal);
+      this.handleCloseModal();
+    }
+  }
+
+  componentDidMount() {
+    document.body.addEventListener(
+      "keydown",
+      this.closeOnEscapeKeyDown.bind(this)
+    );
+  }
+
   render() {
     const { imgUrl } = this.props;
     const { rotation } = this.state;
     if (this.props.show) {
       return (
         <div className="modal" onClick={this.handleCloseModal.bind(this)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <div
-              style={{
-                transform: `rotate(${rotation}deg)`,
-              }}
-            >
+          <div
+            className="modal-content"
+            style={{
+              transform: `rotate(${rotation}deg)`,
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div>
               <img src={imgUrl} alt="image" />
               <div>
                 <FontAwesome
