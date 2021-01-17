@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 import FontAwesome from "react-fontawesome";
 import "./Image.scss";
-
 class Image extends React.Component {
   static propTypes = {
     dto: PropTypes.object,
@@ -44,10 +43,24 @@ class Image extends React.Component {
 
   componentDidMount() {
     this.calcImageSize();
+    let imgSizeValue = this.state.size;
+    this.props.imgSize(imgSizeValue);
   }
 
   urlFromDto(dto) {
     return `https://farm${dto.farm}.staticflickr.com/${dto.server}/${dto.id}_${dto.secret}.jpg`;
+  }
+
+  handleExpandClick() {
+    const { dto } = this.props;
+    this.props.onShow(
+      `https://farm${dto.farm}.staticflickr.com/${dto.server}/${dto.id}_${dto.secret}.jpg}`,
+      dto.id
+    );
+  }
+
+  handleModalClose() {
+    this.setState({ modalIsOpen: false });
   }
 
   render() {
@@ -75,7 +88,12 @@ class Image extends React.Component {
             title="delete"
             onClick={this.delete.bind(this)}
           />
-          <FontAwesome className="image-icon" name="expand" title="expand" />
+          <FontAwesome
+            className="image-icon"
+            name="expand"
+            title="expand"
+            onClick={this.handleExpandClick.bind(this)}
+          />
         </div>
       </div>
     );

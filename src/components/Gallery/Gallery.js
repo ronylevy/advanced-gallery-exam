@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import axios from "axios";
 import Image from "../Image";
 import "./Gallery.scss";
+import ImageModal from "../Modal/ImageModal";
 
 class Gallery extends React.Component {
   static propTypes = {
@@ -14,6 +15,9 @@ class Gallery extends React.Component {
     this.state = {
       images: [],
       galleryWidth: this.getGalleryWidth(),
+      modalIsOpen: false,
+      imgUrl: "",
+      imgId: "",
     };
   }
 
@@ -58,7 +62,19 @@ class Gallery extends React.Component {
 
   onDelete(imgId) {
     const newImagesArray = this.state.images.filter((img) => img.id !== imgId);
-    this.setState({ images: newImagesArray });
+    this.setState({ images: newImagesArray, modalIsOpen: false });
+  }
+
+  handleExpandButtonClick(imgUrl, imgId) {
+    this.setState({ modalIsOpen: true, imgUrl: imgUrl, imgId: imgId });
+  }
+
+  handleCloseModal(close) {
+    this.setState({ modalIsOpen: close });
+  }
+
+  setImgSize(imgSize) {
+    this.setState({ imgSize: imgSize });
   }
 
   render() {
@@ -71,9 +87,18 @@ class Gallery extends React.Component {
               dto={dto}
               galleryWidth={this.state.galleryWidth}
               onDelete={this.onDelete.bind(this)}
+              onShow={this.handleExpandButtonClick.bind(this)}
+              imgSize={this.setImgSize.bind(this)}
             />
           );
         })}
+        <ImageModal
+          show={this.state.modalIsOpen}
+          onClose={this.handleCloseModal.bind(this)}
+          imgUrl={this.state.imgUrl}
+          imgId={this.state.imgId}
+          onDelete={this.onDelete.bind(this)}
+        />
       </div>
     );
   }
