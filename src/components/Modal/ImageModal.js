@@ -31,7 +31,6 @@ class ImageModal extends React.Component {
 
   closeOnEscapeKeyDown(e) {
     if (e.keyCode === 27) {
-      // console.log(this.handleCloseModal);
       this.handleCloseModal();
     }
   }

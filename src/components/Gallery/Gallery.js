@@ -12,6 +12,7 @@ class Gallery extends React.Component {
 
   constructor(props) {
     super(props);
+    this.handleWindowResize = this.handleWindowResize.bind(this);
     this.state = {
       images: [],
       galleryWidth: this.getGalleryWidth(),
@@ -49,11 +50,17 @@ class Gallery extends React.Component {
       });
   }
 
+  handleWindowResize() {
+    // console.log(this.$r.setState());
+    this.$r.setState({ galleryWidth: window.innerWidth });
+  }
+
   componentDidMount() {
     this.getImages(this.props.tag);
     this.setState({
       galleryWidth: document.body.clientWidth,
     });
+    window.addEventListener("resize", this.handleWindowResize.bind(this));
   }
 
   componentWillReceiveProps(props) {
