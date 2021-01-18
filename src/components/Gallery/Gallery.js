@@ -51,7 +51,6 @@ class Gallery extends React.Component {
   }
 
   handleWindowResize() {
-    // console.log(this.$r.setState());
     this.setState({ galleryWidth: window.innerWidth });
   }
 
@@ -80,10 +79,6 @@ class Gallery extends React.Component {
     this.setState({ modalIsOpen: close });
   }
 
-  setImgSize(imgSize) {
-    this.setState({ imgSize: imgSize });
-  }
-
   render() {
     return (
       <div className="gallery-root">
@@ -95,7 +90,6 @@ class Gallery extends React.Component {
               galleryWidth={this.state.galleryWidth}
               onDelete={this.onDelete.bind(this)}
               onShow={this.handleExpandButtonClick.bind(this)}
-              imgSize={this.setImgSize.bind(this)}
             />
           );
         })}

@@ -43,8 +43,12 @@ class Image extends React.Component {
 
   componentDidMount() {
     this.calcImageSize();
-    let imgSizeValue = this.state.size;
-    this.props.imgSize(imgSizeValue);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.galleryWidth !== prevProps.galleryWidth) {
+      this.calcImageSize();
+    }
   }
 
   urlFromDto(dto) {
@@ -64,6 +68,7 @@ class Image extends React.Component {
   }
 
   render() {
+    console.log("component was re-rendered");
     const { rotation } = this.state;
     return (
       <div
