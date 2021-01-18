@@ -31,7 +31,7 @@ class Gallery extends React.Component {
     }
   }
 
-  getImages(tag) {
+  getMoreImagesWithSameTag(tag) {
     const getImagesUrl = `services/rest/?method=flickr.photos.search&api_key=522c1f9009ca3609bcbaf08545f067ad&tags=${tag}&tag_mode=any&per_page=100&format=json&nojsoncallback=1`;
     const baseUrl = "https://api.flickr.com/";
     axios({
@@ -55,6 +55,29 @@ class Gallery extends React.Component {
       });
   }
 
+  getImagesWithDiffTag(tag) {
+    const getImagesUrl = `services/rest/?method=flickr.photos.search&api_key=522c1f9009ca3609bcbaf08545f067ad&tags=${tag}&tag_mode=any&per_page=100&format=json&nojsoncallback=1`;
+    const baseUrl = "https://api.flickr.com/";
+    axios({
+      url: getImagesUrl,
+      baseURL: baseUrl,
+      method: "GET",
+    })
+      .then((res) => res.data)
+      .then((res) => {
+        if (
+          res &&
+          res.photos &&
+          res.photos.photo &&
+          res.photos.photo.length > 0
+        ) {
+          this.setState({
+            images: res.photos.photo,
+          });
+        }
+      });
+  }
+
   handleWindowResize() {
     this.setState({ galleryWidth: window.innerWidth });
   }
@@ -66,14 +89,14 @@ class Gallery extends React.Component {
         document.body.clientHeight - innerHeight
       );
       if (userScrollPosition >= 0.9 * maximumScrollPosition) {
-        this.getImages();
+        this.getMoreImagesWithSameTag(this.props.tag);
       }
     }, 500);
   }
 
   componentDidMount() {
     this.trackingScrollPosition();
-    this.getImages();
+    this.getImagesWithDiffTag(this.props.tag);
     this.setState({
       galleryWidth: document.body.clientWidth,
     });
@@ -81,7 +104,7 @@ class Gallery extends React.Component {
   }
 
   componentWillReceiveProps(props) {
-    this.getImages(props.tag);
+    this.getImagesWithDiffTag(props.tag);
   }
 
   onDelete(imgId) {
