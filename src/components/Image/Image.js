@@ -68,7 +68,6 @@ class Image extends React.Component {
   }
 
   render() {
-    console.log("component was re-rendered");
     const { rotation } = this.state;
     return (
       <div

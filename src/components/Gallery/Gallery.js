@@ -19,6 +19,7 @@ class Gallery extends React.Component {
       modalIsOpen: false,
       imgUrl: "",
       imgId: "",
+      scrollPosition: 0,
     };
   }
 
@@ -29,6 +30,7 @@ class Gallery extends React.Component {
       return 1000;
     }
   }
+
   getImages(tag) {
     const getImagesUrl = `services/rest/?method=flickr.photos.search&api_key=522c1f9009ca3609bcbaf08545f067ad&tags=${tag}&tag_mode=any&per_page=100&format=json&nojsoncallback=1`;
     const baseUrl = "https://api.flickr.com/";
@@ -45,7 +47,10 @@ class Gallery extends React.Component {
           res.photos.photo &&
           res.photos.photo.length > 0
         ) {
-          this.setState({ images: res.photos.photo });
+          let newImagesArray = this.state.images.concat(res.photos.photo);
+          this.setState({
+            images: newImagesArray,
+          });
         }
       });
   }
@@ -54,8 +59,21 @@ class Gallery extends React.Component {
     this.setState({ galleryWidth: window.innerWidth });
   }
 
+  trackingScrollPosition() {
+    setInterval(() => {
+      const userScrollPosition = parseInt(window.pageYOffset);
+      const maximumScrollPosition = parseInt(
+        document.body.clientHeight - innerHeight
+      );
+      if (userScrollPosition >= 0.9 * maximumScrollPosition) {
+        this.getImages();
+      }
+    }, 500);
+  }
+
   componentDidMount() {
-    this.getImages(this.props.tag);
+    this.trackingScrollPosition();
+    this.getImages();
     this.setState({
       galleryWidth: document.body.clientWidth,
     });
@@ -85,7 +103,7 @@ class Gallery extends React.Component {
         {this.state.images.map((dto) => {
           return (
             <Image
-              key={"image-" + dto.id}
+              key={"image-" + dto.id + Date.now()}
               dto={dto}
               galleryWidth={this.state.galleryWidth}
               onDelete={this.onDelete.bind(this)}
