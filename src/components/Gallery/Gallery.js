@@ -52,7 +52,7 @@ class Gallery extends React.Component {
 
   handleWindowResize() {
     // console.log(this.$r.setState());
-    this.$r.setState({ galleryWidth: window.innerWidth });
+    this.setState({ galleryWidth: window.innerWidth });
   }
 
   componentDidMount() {
