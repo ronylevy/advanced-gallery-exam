@@ -120,12 +120,18 @@ class Gallery extends React.Component {
     this.setState({ modalIsOpen: close });
   }
 
+  dragAndDrop(newImagesArray) {
+    this.setState({ images: newImagesArray });
+  }
+
   render() {
     return (
       <div className="gallery-root">
         {this.state.images.map((dto) => {
           return (
             <Image
+              dragAndDrop={this.dragAndDrop.bind(this)}
+              imagesArray={this.state.images}
               key={"image-" + dto.id + Date.now()}
               dto={dto}
               galleryWidth={this.state.galleryWidth}

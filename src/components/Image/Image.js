@@ -67,10 +67,51 @@ class Image extends React.Component {
     this.setState({ modalIsOpen: false });
   }
 
+  onDragStart(event, imgId) {
+    const { imagesArray } = this.props;
+    // console.log(imagesArray);
+    event.dataTransfer.setData("DragImgId", imgId);
+  }
+
+  swap(arr, from, to) {
+    arr.splice(from, 1, arr.splice(to, 1, arr[from])[0]);
+  }
+
+  onDrop = (event, dropImgId) => {
+    const { imagesArray } = this.props;
+    let dragImgId = event.dataTransfer.getData("DragImgId");
+    event.dataTransfer.clearData();
+    const dragImageIndex = imagesArray.findIndex(
+      (image) => image.id === dragImgId
+    );
+    const dropImageIndex = imagesArray.findIndex(
+      (image) => image.id === dropImgId
+    );
+
+    // console.log(imagesArray[dragImageIndex].id, imagesArray[dropImageIndex].id);
+
+    const temp = imagesArray[dragImageIndex];
+    imagesArray[dragImageIndex] = imagesArray[dropImageIndex];
+    imagesArray[dropImageIndex] = temp;
+
+    // console.log(imagesArray);
+    this.props.dragAndDrop(imagesArray);
+  };
+
   render() {
     const { rotation } = this.state;
     return (
       <div
+        draggable
+        onDragOver={(event) => {
+          event.preventDefault();
+        }}
+        onDragStart={(e) => {
+          this.onDragStart(e, this.props.dto.id);
+        }}
+        onDrop={(e) => {
+          this.onDrop(e, this.props.dto.id);
+        }}
         className="image-root"
         style={{
           transform: `rotate(${rotation}deg)`,
