@@ -57,7 +57,7 @@ class ImageModal extends React.Component {
           >
             <div>
               <img src={imgUrl} alt="image" />
-              <div>
+              <div className="icons">
                 <FontAwesome
                   className="image-icon"
                   name="sync-alt"

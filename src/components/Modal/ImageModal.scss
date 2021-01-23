@@ -12,8 +12,27 @@
 }
 
 .modal-content {
-    background-color: #FFF;
+    background-color: rgba(0, 0, 0, 0.5);
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.icons {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.image-icon {
+    font-size: 20px;
+    vertical-align: middle;
+    border: 1px solid #ccc;
+    color: #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 12px;
+    margin: 3px;
+    &:hover {
+        color: white;
+        border-color: white;
+    }
 }

@@ -65,7 +65,6 @@ class Image extends React.Component {
 
   handleLikeButtonClick() {
     const { dto } = this.props;
-    console.log(dto);
     this.props.onLike(dto);
   }
 
@@ -135,6 +134,7 @@ class Image extends React.Component {
             title="expand"
             onClick={this.handleExpandClick.bind(this)}
           />
+
           <FontAwesome
             className="image-icon"
             name="heart"

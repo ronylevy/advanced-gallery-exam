@@ -4,7 +4,7 @@ import axios from "axios";
 import Image from "../Image";
 import "./Gallery.scss";
 import ImageModal from "../Modal/ImageModal";
-import { debounce } from "./deboucer";
+import { debounce } from "./debouncer";
 class Gallery extends React.Component {
   static propTypes = {
     tag: PropTypes.string,
@@ -12,10 +12,6 @@ class Gallery extends React.Component {
 
   constructor(props) {
     super(props);
-    this.getMoreImagesWithSameTag = debounce(
-      this.getMoreImagesWithSameTag,
-      200
-    );
     this.getImagesWithDiffTag = debounce(this.getImagesWithDiffTag, 200);
     this.state = {
       images: [],
@@ -96,7 +92,7 @@ class Gallery extends React.Component {
   }
 
   componentDidMount() {
-    this.getImagesWithDiffTag(this.props.tag);
+    // this.getImagesWithDiffTag(this.props.tag);
     this.trackingScrollPosition();
     this.setState({
       galleryWidth: document.body.clientWidth,
