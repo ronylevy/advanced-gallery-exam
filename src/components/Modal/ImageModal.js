@@ -29,6 +29,11 @@ class ImageModal extends React.Component {
     });
   }
 
+  handleLikeButtonClick() {
+    const { dto } = this.props;
+    this.props.onLike(dto);
+  }
+
   closeOnEscapeKeyDown(e) {
     if (e.keyCode === 27) {
       this.handleCloseModal();
@@ -45,7 +50,8 @@ class ImageModal extends React.Component {
   render() {
     const { imgUrl } = this.props;
     const { rotation } = this.state;
-    if (this.props.show) {
+    const { show } = this.props;
+    if (show) {
       return (
         <div className="modal" onClick={this.handleCloseModal.bind(this)}>
           <div
@@ -75,6 +81,12 @@ class ImageModal extends React.Component {
                   name="expand"
                   title="expand"
                   onClick={this.handleCloseModal.bind(this)}
+                />
+                <FontAwesome
+                  className="image-icon"
+                  name="heart"
+                  title="heart"
+                  onClick={this.handleLikeButtonClick.bind(this)}
                 />
               </div>
             </div>

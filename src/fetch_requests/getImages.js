@@ -11,6 +11,6 @@ export function getImages(tag) {
                 res.photos &&
                 res.photos.photo &&
                 res.photos.photo.length > 0
-            ) res
+            ) res.photos.photo
         })
 }

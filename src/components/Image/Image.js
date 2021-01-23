@@ -10,21 +10,10 @@ class Image extends React.Component {
 
   constructor(props) {
     super(props);
-    this.calcImageSize = this.calcImageSize.bind(this);
     this.state = {
       size: 200,
       rotation: 0,
     };
-  }
-
-  calcImageSize() {
-    const { galleryWidth } = this.props;
-    const targetSize = 200;
-    const imagesPerRow = Math.round(galleryWidth / targetSize);
-    const size = galleryWidth / imagesPerRow;
-    this.setState({
-      size,
-    });
   }
 
   delete() {
@@ -41,26 +30,17 @@ class Image extends React.Component {
     });
   }
 
-  componentDidMount() {
-    this.calcImageSize();
-  }
-
-  componentDidUpdate(prevProps) {
-    if (this.props.galleryWidth !== prevProps.galleryWidth) {
-      this.calcImageSize();
-    }
-  }
-
-  urlFromDto(dto) {
-    return `https://farm${dto.farm}.staticflickr.com/${dto.server}/${dto.id}_${dto.secret}.jpg`;
-  }
-
   handleExpandClick() {
     const { dto } = this.props;
     this.props.onShow(
       `https://farm${dto.farm}.staticflickr.com/${dto.server}/${dto.id}_${dto.secret}.jpg}`,
-      dto.id
+      dto.id,
+      dto
     );
+  }
+
+  urlFromDto(dto) {
+    return `https://farm${dto.farm}.staticflickr.com/${dto.server}/${dto.id}_${dto.secret}.jpg`;
   }
 
   handleLikeButtonClick() {
@@ -134,7 +114,6 @@ class Image extends React.Component {
             title="expand"
             onClick={this.handleExpandClick.bind(this)}
           />
-
           <FontAwesome
             className="image-icon"
             name="heart"

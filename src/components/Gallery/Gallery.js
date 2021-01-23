@@ -12,6 +12,7 @@ class Gallery extends React.Component {
 
   constructor(props) {
     super(props);
+    this.baseUrl = "https://api.flickr.com/";
     this.getImagesWithDiffTag = debounce(this.getImagesWithDiffTag, 200);
     this.state = {
       images: [],
@@ -20,6 +21,7 @@ class Gallery extends React.Component {
       modalIsOpen: false,
       imgUrl: "",
       imgId: "",
+      singleImgdto: null,
       scrollPosition: 0,
     };
   }
@@ -34,10 +36,9 @@ class Gallery extends React.Component {
 
   getMoreImagesWithSameTag(tag) {
     const getImagesUrl = `services/rest/?method=flickr.photos.search&api_key=522c1f9009ca3609bcbaf08545f067ad&tags=${tag}&tag_mode=any&per_page=100&format=json&nojsoncallback=1`;
-    const baseUrl = "https://api.flickr.com/";
     axios({
       url: getImagesUrl,
-      baseURL: baseUrl,
+      baseURL: this.baseUrl,
       method: "GET",
     })
       .then((res) => res.data)
@@ -58,10 +59,9 @@ class Gallery extends React.Component {
 
   getImagesWithDiffTag(tag) {
     const getImagesUrl = `services/rest/?method=flickr.photos.search&api_key=522c1f9009ca3609bcbaf08545f067ad&tags=${tag}&tag_mode=any&per_page=100&format=json&nojsoncallback=1`;
-    const baseUrl = "https://api.flickr.com/";
     axios({
       url: getImagesUrl,
-      baseURL: baseUrl,
+      baseURL: this.baseUrl,
       method: "GET",
     })
       .then((res) => res.data)
@@ -111,8 +111,13 @@ class Gallery extends React.Component {
     this.setState({ images: newImagesArray, modalIsOpen: false });
   }
 
-  handleExpandButtonClick(imgUrl, imgId) {
-    this.setState({ modalIsOpen: true, imgUrl: imgUrl, imgId: imgId });
+  handleExpandButtonClick(imgUrl, imgId, imgdto) {
+    this.setState({
+      modalIsOpen: true,
+      imgUrl: imgUrl,
+      imgId: imgId,
+      singleImgdto: imgdto,
+    });
   }
 
   handleCloseModal(close) {
@@ -161,11 +166,13 @@ class Gallery extends React.Component {
               );
             })}
         <ImageModal
+          dto={this.state.singleImgdto}
           show={this.state.modalIsOpen}
           onClose={this.handleCloseModal.bind(this)}
           imgUrl={this.state.imgUrl}
           imgId={this.state.imgId}
           onDelete={this.onDelete.bind(this)}
+          onLike={this.handleLikeButtonClick.bind(this)}
         />
       </div>
     );
