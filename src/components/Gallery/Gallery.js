@@ -80,19 +80,22 @@ class Gallery extends React.Component {
   }
 
   trackingScrollPosition() {
-    setInterval(() => {
-      const userScrollPosition = parseInt(window.pageYOffset);
-      const maximumScrollPosition = parseInt(
-        document.body.clientHeight - innerHeight
-      );
-      if (userScrollPosition >= 0.9 * maximumScrollPosition) {
-        this.getMoreImagesWithSameTag(this.props.tag);
-      }
-    }, 500);
+    setTimeout(
+      setInterval(() => {
+        const userScrollPosition = parseInt(window.pageYOffset);
+        const maximumScrollPosition = parseInt(
+          document.body.clientHeight - innerHeight
+        );
+        if (userScrollPosition >= 0.9 * maximumScrollPosition) {
+          this.getMoreImagesWithSameTag(this.props.tag);
+        }
+      }, 500),
+      10000
+    );
   }
 
   componentDidMount() {
-    // this.getImagesWithDiffTag(this.props.tag);
+    this.getImagesWithDiffTag(this.props.tag);
     this.trackingScrollPosition();
     this.setState({
       galleryWidth: document.body.clientWidth,
