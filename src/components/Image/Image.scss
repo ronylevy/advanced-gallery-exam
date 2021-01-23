@@ -1,7 +1,6 @@
 .image-root {
     background-size: cover;
     background-position: center center;
-    display: inline-block;
     vertical-align: top;
     box-sizing: border-box;
     position: relative;
@@ -43,4 +42,10 @@
             border-color: white;
         }
     }
+}
+
+.like-icon {
+    position: absolute;
+    right: 5px;
+    top: 5px;
 }

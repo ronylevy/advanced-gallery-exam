@@ -4,7 +4,7 @@ import axios from "axios";
 import Image from "../Image";
 import "./Gallery.scss";
 import ImageModal from "../Modal/ImageModal";
-
+import { debounce } from "./deboucer";
 class Gallery extends React.Component {
   static propTypes = {
     tag: PropTypes.string,
@@ -12,9 +12,14 @@ class Gallery extends React.Component {
 
   constructor(props) {
     super(props);
-    this.handleWindowResize = this.handleWindowResize.bind(this);
+    this.getMoreImagesWithSameTag = debounce(
+      this.getMoreImagesWithSameTag,
+      200
+    );
+    this.getImagesWithDiffTag = debounce(this.getImagesWithDiffTag, 200);
     this.state = {
       images: [],
+      likedImages: [],
       galleryWidth: this.getGalleryWidth(),
       modalIsOpen: false,
       imgUrl: "",
@@ -78,10 +83,6 @@ class Gallery extends React.Component {
       });
   }
 
-  handleWindowResize() {
-    this.setState({ galleryWidth: window.innerWidth });
-  }
-
   trackingScrollPosition() {
     setInterval(() => {
       const userScrollPosition = parseInt(window.pageYOffset);
@@ -95,12 +96,11 @@ class Gallery extends React.Component {
   }
 
   componentDidMount() {
-    this.trackingScrollPosition();
     this.getImagesWithDiffTag(this.props.tag);
+    this.trackingScrollPosition();
     this.setState({
       galleryWidth: document.body.clientWidth,
     });
-    window.addEventListener("resize", this.handleWindowResize.bind(this));
   }
 
   componentWillReceiveProps(props) {
@@ -124,22 +124,43 @@ class Gallery extends React.Component {
     this.setState({ images: newImagesArray });
   }
 
+  handleLikeButtonClick(dto) {
+    this.setState({ likedImages: [...this.state.likedImages, dto] });
+  }
+
   render() {
+    const { page } = this.props;
     return (
       <div className="gallery-root">
-        {this.state.images.map((dto) => {
-          return (
-            <Image
-              dragAndDrop={this.dragAndDrop.bind(this)}
-              imagesArray={this.state.images}
-              key={"image-" + dto.id + Date.now()}
-              dto={dto}
-              galleryWidth={this.state.galleryWidth}
-              onDelete={this.onDelete.bind(this)}
-              onShow={this.handleExpandButtonClick.bind(this)}
-            />
-          );
-        })}
+        {page === "search"
+          ? this.state.images.map((dto) => {
+              return (
+                <Image
+                  dragAndDrop={this.dragAndDrop.bind(this)}
+                  imagesArray={this.state.images}
+                  key={"image-" + dto.id + Date.now() + dto.secret}
+                  dto={dto}
+                  galleryWidth={this.state.galleryWidth}
+                  onDelete={this.onDelete.bind(this)}
+                  onShow={this.handleExpandButtonClick.bind(this)}
+                  onLike={this.handleLikeButtonClick.bind(this)}
+                />
+              );
+            })
+          : this.state.likedImages.map((dto) => {
+              return (
+                <Image
+                  dragAndDrop={this.dragAndDrop.bind(this)}
+                  imagesArray={this.state.likedImages}
+                  key={"image-" + dto.id + Date.now() + dto.secret}
+                  dto={dto}
+                  galleryWidth={this.state.galleryWidth}
+                  onDelete={this.onDelete.bind(this)}
+                  onShow={this.handleExpandButtonClick.bind(this)}
+                  onLike={this.handleLikeButtonClick.bind(this)}
+                />
+              );
+            })}
         <ImageModal
           show={this.state.modalIsOpen}
           onClose={this.handleCloseModal.bind(this)}

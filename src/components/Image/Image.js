@@ -63,40 +63,37 @@ class Image extends React.Component {
     );
   }
 
+  handleLikeButtonClick() {
+    const { dto } = this.props;
+    console.log(dto);
+    this.props.onLike(dto);
+  }
+
   handleModalClose() {
     this.setState({ modalIsOpen: false });
   }
 
   onDragStart(event, imgId) {
-    const { imagesArray } = this.props;
-    // console.log(imagesArray);
-    event.dataTransfer.setData("DragImgId", imgId);
+    event.dataTransfer.setData("DraggedImgId", imgId);
   }
 
-  swap(arr, from, to) {
-    arr.splice(from, 1, arr.splice(to, 1, arr[from])[0]);
-  }
-
-  onDrop = (event, dropImgId) => {
+  onDrop(event, droppedImgId) {
     const { imagesArray } = this.props;
-    let dragImgId = event.dataTransfer.getData("DragImgId");
+    let draggedImgId = event.dataTransfer.getData("DraggedImgId");
     event.dataTransfer.clearData();
     const dragImageIndex = imagesArray.findIndex(
-      (image) => image.id === dragImgId
+      (image) => image.id === draggedImgId
     );
     const dropImageIndex = imagesArray.findIndex(
-      (image) => image.id === dropImgId
+      (image) => image.id === droppedImgId
     );
-
-    // console.log(imagesArray[dragImageIndex].id, imagesArray[dropImageIndex].id);
 
     const temp = imagesArray[dragImageIndex];
     imagesArray[dragImageIndex] = imagesArray[dropImageIndex];
     imagesArray[dropImageIndex] = temp;
 
-    // console.log(imagesArray);
     this.props.dragAndDrop(imagesArray);
-  };
+  }
 
   render() {
     const { rotation } = this.state;
@@ -116,7 +113,6 @@ class Image extends React.Component {
         style={{
           transform: `rotate(${rotation}deg)`,
           backgroundImage: `url(${this.urlFromDto(this.props.dto)})`,
-          // width: this.state.size + "px",
           height: this.state.size + "px",
         }}
       >
@@ -138,6 +134,12 @@ class Image extends React.Component {
             name="expand"
             title="expand"
             onClick={this.handleExpandClick.bind(this)}
+          />
+          <FontAwesome
+            className="image-icon"
+            name="heart"
+            title="heart"
+            onClick={this.handleLikeButtonClick.bind(this)}
           />
         </div>
       </div>
