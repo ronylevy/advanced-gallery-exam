@@ -151,7 +151,6 @@ class Gallery extends React.Component {
     const { page } = this.props;
     return (
       <div className="gallery-root">
-        {" "}
         {page === "search"
           ? this.state.images.map((dto) => {
               return (
@@ -180,7 +179,7 @@ class Gallery extends React.Component {
                   onLike={this.handleLikeButtonClick.bind(this)}
                 />
               );
-            })}{" "}
+            })}
         <ImageModal
           dto={this.state.singleImgdto}
           show={this.state.modalIsOpen}
@@ -189,7 +188,7 @@ class Gallery extends React.Component {
           imgId={this.state.imgId}
           onDelete={this.onDelete.bind(this)}
           onLike={this.handleLikeButtonClick.bind(this)}
-        />{" "}
+        />
       </div>
     );
   }
